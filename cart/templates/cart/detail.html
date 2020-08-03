@@ -8,23 +8,23 @@
     </div>
     <div class="price_out">
         {% if cart.get_len %}
-            <div class="goods">
+            <div class="list_goods">
             {% for item in cart %}
                 {% with product=item.product %}
-                    <div>
+                    <div class="one_good">
                         <div class="con_img">
                             <a href="{% url 'product_detail' pk=product.id_product %}">
                                 <img src="{{ product.image.url }}" alt="">
                             </a>
                         </div>
                         <div>
-                            {{ product }}
+                            Артикул: {{ product.id_product }}
                         </div>
                         <div>
                             {{ product.title }}
                         </div>
                         <div>
-                            Количество товара:
+                            Количество:
                             {{ item.quantity }}
                         </div>
                         <div>
@@ -44,12 +44,22 @@
             </div>
         {% endif %}
         <div class="price">
-            <div class="inner_price">
-                <h3 style="margin-bottom: 20px;">Стоимость заказа</h3>
-                <p style="color: grey;">{{ cart.get_total_price }} руб.</p>
-                <div style="margin-bottom: 20px;">
-                    <a href="{% url 'order_create' %}" ><button class="btn btn-secondary my-2 my-sm-0" type="submit">Оплатить</button></a>
-                </div>
+            <h3 style="margin-bottom: 20px;">Стоимость заказа</h3>
+            {% for item in cart %}
+                <li>
+                    {{ item.quantity }}x {{ item.product.title }}
+                    <span style="margin-left: 20px">${{ item.total_price }}</span>
+                </li>
+            {% endfor %}
+            <p style="color: grey;">Итого: {{ cart.get_total_price }} руб.</p>
+            <div style="margin-bottom: 20px;">
+                <a href="{% url 'order_create' %}" >
+                    {% if  cart.get_len == 0 %}
+                        <button class="btn btn-secondary my-2 my-sm-0" type="submit" disabled>Оплатить</button>
+                    {% else %}
+                        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Оплатить</button>
+                    {% endif %}
+                </a>
             </div>
         </div>
     </div>

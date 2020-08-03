@@ -19,6 +19,14 @@ class Cart(object):
                                      'price': str(product.get_latest_price())}
         self.cart[product_id]['quantity'] += quantity
 
+    def check_product(self, id_prod):
+        """Наличие продукта в корзине"""
+        product_id = str(id_prod)
+        if product_id in self.cart:
+            return self.cart[product_id]['quantity']
+        else:
+            return False
+
     def save(self):
         # Обновление сессии cart
         self.session[settings.CART_SESSION_ID] = self.cart

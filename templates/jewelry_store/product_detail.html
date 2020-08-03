@@ -24,7 +24,13 @@
                             <form action="{% url "cart:cart_add" product.id_product %}" method="post">
                                 {{ cart_product_form }}
                                 {% csrf_token %}
-                                <input type="submit" value="Добавить в корзину">
+                                {% if not product_in_cart %}
+                                    <input type="submit" value="Добавить в корзину" class="btn btn-danger btn-buy">
+                                {% elif check %}
+                                    <input type="submit" value="В корзине {{ product_in_cart }} шт" class="btn btn-success btn-buy">
+                                {% else %}
+                                    <input type="submit" value="В корзине {{ product_in_cart }} шт" class="btn btn-success btn-buy" disabled>
+                                {% endif %}
                             </form>
     {#						<button type="button" class="btn btn-danger btn-buy" id="1">Добавить в корзину <i class="fa fa-cart-arrow-down" aria-hidden="true"></i></button>#}
                             <div>

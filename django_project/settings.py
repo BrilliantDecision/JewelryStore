@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # 'ckeditor',
     'jewelry_store',
     'cart',
+    'api',
     'rest_framework'
 ]
 
