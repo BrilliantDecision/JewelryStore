@@ -20,11 +20,11 @@ from django.urls import path, include
 from django.conf.urls import url
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('angel/', admin.site.urls),
     url(r'^cart/', include(('cart.urls', 'cart'), namespace='cart')),
     path("", include("jewelry_store.urls")),
     path("api-auth/", include('rest_framework.urls')),
-    path("api/v1/", include("jewelry_store.urls")),
+    path("api/v1/", include("api.urls")),
 ]
 
 if settings.DEBUG:

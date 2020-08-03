@@ -1,15 +1,10 @@
-from django.shortcuts import render, get_object_or_404
-from jewelry_store.models import Purchase, AllPurchases, Status
+from django.shortcuts import render
+from jewelry_store.models import Purchase, AllPurchases, Status, Product
 from cart.cart import Cart
 from jewelry_store.forms import ClientCreateForm
-import cart.forms
 # Create your views here.
 
-from cart.forms import CartAddProductForm
-
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from jewelry_store.serializer import *
+from cart.forms import CartAddProductForm, MAX_AMOUNT
 
 
 def product_list(request, pk):
@@ -21,10 +16,17 @@ def product_list(request, pk):
 
 
 def product_detail(request, pk):
+    cart = Cart(request)
+    product_in_cart = cart.check_product(pk)
+    check = True
     product = Product.objects.get(id_product=pk)
+    if product_in_cart == MAX_AMOUNT or product_in_cart == product.amount_storage or not product_in_cart:
+        check = False
     cart_product_form = CartAddProductForm()
     cart_product_form.set_amount(product.amount_storage)
     context = {
+        'product_in_cart': product_in_cart,
+        'check': check,
         'product': product,
         'cart_product_form': cart_product_form
     }
@@ -53,61 +55,6 @@ def client_order_create(request):
             return render(request, 'jewelry_store/created.html', {'client': client,
                                                                   'order': purchase})
     else:
-        form = ClientCreateForm
+        form = ClientCreateForm()
     return render(request, 'jewelry_store/create.html', {'cart': my_cart,
                                                          'form': form})
-
-
-class ProductListView(APIView):
-    def get(self, request):
-        products = Product.objects.all()
-        serializer = ProductListSerializer(products, many=True)
-        return Response(serializer.data)
-
-
-class ProductDetailView(APIView):
-    def get(self, request, pk):
-        products = Product.objects.get(id_product=pk)
-        serializer = ProductDetailSerializer(products)
-        return Response(serializer.data)
-
-
-class PriceCreateView(APIView):
-    def post(self, request):
-        serializer = PriceCreateSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(status=201)
-        else:
-            return Response(status=400)
-
-
-class StatusListView(APIView):
-    def get(self, request):
-        statuses = Status.objects.all()
-        serializer = StatusListSerializer(statuses, many=True)
-        return Response(serializer.data)
-
-
-class StatusCreateView(APIView):
-    def post(self, request):
-        serializer = StatusCreateSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(status=201)
-        else:
-            return Response(status=400)
-
-
-class PurchaseListView(APIView):
-    def get(self, request):
-        purchases = Purchase.objects.all()
-        serializer = PurchaseListSerializer(purchases, many=True)
-        return Response(serializer.data)
-
-
-class PurchaseDetailView(APIView):
-    def get(self, request, pk):
-        purchase = Purchase.objects.get(id_purchase=pk)
-        serializer = PurchaseDetailSerializer(purchase)
-        return Response(serializer.data)

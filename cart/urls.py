@@ -1,6 +1,5 @@
 from django.conf.urls import url
 from cart import views
-from django.urls import path, include
 
 
 urlpatterns = [

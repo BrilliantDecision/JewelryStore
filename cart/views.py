@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
-from jewelry_store.models import Product, CategoriesProduct
+from jewelry_store.models import Product
 from cart.cart import Cart
-from cart.forms import CartAddProductForm
+from cart.forms import CartAddProductForm, MAX_AMOUNT
 # Create your views here.
 
 
@@ -13,10 +13,18 @@ def cart_add(request, pk):
     form = CartAddProductForm(request.POST)
     if form.is_valid():
         cd = form.cleaned_data
-        cart.add(product=product,
-                 quantity=cd['quantity'])
+        amount = cd['quantity'] + cart.check_product(pk)
+        if amount <= MAX_AMOUNT and amount <= product.amount_storage:
+            cart.add(product=product,
+                     quantity=cd['quantity'])
+        elif amount > MAX_AMOUNT:
+            cart.add(product=product,
+                     quantity=MAX_AMOUNT - cart.check_product(pk))
+        elif amount > product.amount_storage:
+            cart.add(product=product,
+                     quantity=product.amount_storage - cart.check_product(pk))
         cart.save()
-    return redirect('cart:cart_detail')
+    return redirect('product_detail', pk=pk)
 
 
 def cart_remove(request, pk):

@@ -194,24 +194,28 @@ h2 {
 
 .goods {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 20px;
+    min-width: 100px;
+}
+
+.inner_good {
     margin: 20px;
 }
 
 .price {
-    width: 40%;
-    margin-left: auto;
-}
-
-.inner_price {
-    background-color: #f8f9fa;
-    width: 80%;
     display: flex;
     flex-direction: column;
+    min-width: 500px;
+    max-width: 700px;
     align-items: center;
-    margin-left: 10px;
-    margin-bottom: 20px;
+    background-color: #efecec;
+    margin-left: auto;
+    margin-right: 50px;
+    height: fit-content;
 }
+
 
 .header {
     margin: 0;
@@ -351,6 +355,29 @@ html, body {
 	margin: 0;
 	padding: 0;
 	max-width: 100%;
+	height: fit-content;
+}
+
+.list_goods {
+    display: flex;
+	justify-content: space-around;
+	align-items: center;
+	flex-direction: row;
+	flex-wrap: wrap;
+	margin: 20px;
+	padding: 0;
+	max-width: 100%;
+	height: fit-content;
+}
+
+.one_good {
+    display: flex;
+	flex-direction: column;
+	padding: 0;
+	margin: 7% 10px;
+	text-align: justify;
+	max-width: 410px;
+	min-width: 250px;
 	height: fit-content;
 }
 
