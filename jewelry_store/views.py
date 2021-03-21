@@ -20,7 +20,8 @@ def product_detail(request, pk):
     product_in_cart = cart.check_product(pk)
     check = True
     product = Product.objects.get(id_product=pk)
-    if product_in_cart == MAX_AMOUNT or product_in_cart == product.amount_storage or not product_in_cart:
+    if product_in_cart == MAX_AMOUNT or \
+            product_in_cart == product.amount_storage or not product_in_cart:
         check = False
     cart_product_form = CartAddProductForm()
     cart_product_form.set_amount(product.amount_storage)

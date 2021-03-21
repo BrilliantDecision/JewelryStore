@@ -1,2 +1,0 @@
-# JewelryStore
-Jewelry online store

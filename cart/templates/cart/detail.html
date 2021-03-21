@@ -48,7 +48,7 @@
             {% for item in cart %}
                 <li>
                     {{ item.quantity }}x {{ item.product.title }}
-                    <span style="margin-left: 20px">${{ item.total_price }}</span>
+                    <span style="margin-left: 20px">{{ item.total_price }}</span>
                 </li>
             {% endfor %}
             <p style="color: grey;">Итого: {{ cart.get_total_price }} руб.</p>
